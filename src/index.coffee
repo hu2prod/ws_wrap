@@ -23,10 +23,8 @@ class Websocket_wrap
     @queue = []
     @timeout = @timeout_min
     @ws_init()
-    websocket_list.push @
   
   delete : ()->
-    websocket_list.remove @
     return
   
   ws_reconnect : ()->
