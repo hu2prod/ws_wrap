@@ -1,0 +1,25 @@
+{
+  "name": "ws_wrap",
+  "version": "1.0.0",
+  "description": "websocket reconnect wrapper",
+  "main": "lib/index.js",
+  "scripts": {
+    "install": "iced -o lib -c src",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hu2prod/ws_wrap.git"
+  },
+  "author": "hu2prod",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hu2prod/ws_wrap/issues"
+  },
+  "homepage": "https://github.com/hu2prod/ws_wrap#readme",
+  "dependencies": {
+    "event_mixin": "github:hu2prod/event_mixin",
+    "fy": "github:hu2prod/fy",
+    "ws": "^3.1.0"
+  }
+}
