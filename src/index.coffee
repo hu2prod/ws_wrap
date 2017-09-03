@@ -40,6 +40,7 @@ class Websocket_wrap
     @websocket = new WebSocket @url
     @timeout = Math.min @timeout_max, Math.round @timeout*@timeout_mult
     @websocket.onopen   = ()=>
+      @dispatch "reconnect"
       @timeout = @timeout_min
       q = @queue.clone()
       @queue.clear()
