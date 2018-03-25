@@ -14,6 +14,7 @@ class Websocket_wrap
   url         : ''
   reconnect_timer : null
   queue       : []
+  quiet       : false
   
   active_script_count : 0
   
@@ -48,13 +49,17 @@ class Websocket_wrap
         @send data
       return
     @websocket.onerror  = (e)=>
-      puts "Websocket error."
-      perr e
+      if !@quiet
+        perr "Websocket #{@url} error."
+        perr e
       @ws_reconnect()
+      @dispatch "error", e
       return
     @websocket.onclose = ()=>
-      puts "Websocket disconnect. Restarting in #{@timeout}"
+      if !@quiet
+        perr "Websocket #{@url} disconnect. Restarting in #{@timeout}"
       @ws_reconnect()
+      @dispatch "error", new Error "close"
       return
     @websocket.onmessage = (message)=>
       data = JSON.parse message.data
