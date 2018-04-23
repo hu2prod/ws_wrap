@@ -15,6 +15,8 @@ class Websocket_wrap
   reconnect_timer : null
   queue       : []
   quiet       : false
+  death_timer_interval : 10000
+  _death_timer : null
   
   active_script_count : 0
   
@@ -62,10 +64,21 @@ class Websocket_wrap
       @dispatch "error", new Error "close"
       return
     @websocket.onmessage = (message)=>
+      @_refresh_death_timer()
       data = JSON.parse message.data
       @dispatch "data", data
       return
+    
+    @_refresh_death_timer()
     return
+  
+  _refresh_death_timer : ()->
+    clearTimeout @_death_timer if @_death_timer
+    @_death_timer = setTimeout ()=>
+      if !@quiet
+        perr "Websocket #{@url} hang."
+      @websocket.terminate()
+    , @death_timer_interval
   
   send : (data)->
     if @websocket.readyState != @websocket.OPEN
