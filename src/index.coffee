@@ -31,7 +31,7 @@ class Websocket_wrap
   
   delete : ()->
     @_need_delete = true
-    @websocket.destroy()
+    @websocket.close()
     return
   
   close : ()->
