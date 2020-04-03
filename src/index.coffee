@@ -27,10 +27,18 @@ class Websocket_wrap
     @timeout = @timeout_min
     @ws_init()
   
+  _need_delete : false
+  
   delete : ()->
+    @_need_delete = true
+    @websocket.destroy()
     return
   
+  close : ()->
+    @delete()
+  
   ws_reconnect : ()->
+    return if @_need_delete
     return if @reconnect_timer
     @reconnect_timer = setTimeout ()=>
       @ws_init()
@@ -50,6 +58,7 @@ class Websocket_wrap
       for data in q
         @send data
       return
+    
     @websocket.onerror  = (e)=>
       if !@quiet
         perr "Websocket #{@url} error."
@@ -57,12 +66,14 @@ class Websocket_wrap
       @ws_reconnect()
       @dispatch "error", e
       return
+    
     @websocket.onclose = ()=>
       if !@quiet
         perr "Websocket #{@url} disconnect. Restarting in #{@timeout}"
       @ws_reconnect()
       @dispatch "error", new Error "close"
       return
+    
     @websocket.onmessage = (message)=>
       @_refresh_death_timer()
       data = JSON.parse message.data
