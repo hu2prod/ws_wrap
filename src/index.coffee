@@ -1,6 +1,6 @@
-require 'fy'
-WebSocket = require 'ws'
-require 'event_mixin'
+require "fy"
+WebSocket = require "ws"
+require "event_mixin"
 
 class Websocket_wrap
   msg_uid  : 0
@@ -11,7 +11,7 @@ class Websocket_wrap
   # timeout_max : 5*60*1000 # 5 min
   timeout_mult: 1.5
   timeout     : 100
-  url         : ''
+  url         : ""
   reconnect_timer : null
   queue       : []
   quiet       : false
