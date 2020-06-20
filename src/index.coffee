@@ -60,6 +60,7 @@ class Websocket_wrap
       return
     
     @websocket.onerror  = (e)=>
+      return if @_need_delete
       if !@quiet
         perr "Websocket #{@url} error."
         perr e
