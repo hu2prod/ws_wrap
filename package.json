@@ -20,6 +20,7 @@
   "dependencies": {
     "event_mixin": "github:hu2prod/event_mixin",
     "fy": "github:hu2prod/fy",
+    "iced-coffee-script": "^108.0.14",
     "ws": "^3.1.0"
   }
 }
