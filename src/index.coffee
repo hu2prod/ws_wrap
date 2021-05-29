@@ -77,7 +77,14 @@ class Websocket_wrap
     
     @websocket.onmessage = (message)=>
       @_refresh_death_timer()
-      data = JSON.parse message.data
+      if message.data instanceof Buffer
+        return @dispatch "data", message.data
+      else
+        try
+          data = JSON.parse message.data
+        catch err
+          perr err
+          return
       @dispatch "data", data
       return
     
@@ -96,7 +103,10 @@ class Websocket_wrap
     if @websocket.readyState != @websocket.OPEN
       @queue.push data
     else
-      @websocket.send JSON.stringify data
+      if data instanceof Buffer
+        @websocket.send data
+      else
+        @websocket.send JSON.stringify data
     return
   
   write : @prototype.send
