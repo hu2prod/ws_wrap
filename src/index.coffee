@@ -52,6 +52,7 @@ class Websocket_wrap
     @websocket = new WebSocket @url
     @timeout = Math.min @timeout_max, Math.round @timeout*@timeout_mult
     @websocket.onopen   = ()=>
+      return if @_need_delete
       @dispatch "reconnect"
       @timeout = @timeout_min
       q = @queue.clone()
@@ -70,6 +71,7 @@ class Websocket_wrap
       return
     
     @websocket.onclose = ()=>
+      return if @_need_delete
       if !@quiet
         perr "Websocket #{@url} disconnect. Restarting in #{@timeout}"
       @ws_reconnect()
@@ -77,6 +79,7 @@ class Websocket_wrap
       return
     
     @websocket.onmessage = (message)=>
+      return if @_need_delete
       @_refresh_death_timer()
       if message.data instanceof Buffer
         return @dispatch "data", message.data
@@ -93,6 +96,7 @@ class Websocket_wrap
     return
   
   _refresh_death_timer : ()->
+    return if @_need_delete
     clearTimeout @_death_timer if @_death_timer
     @_death_timer = setTimeout ()=>
       if !@quiet
@@ -101,6 +105,7 @@ class Websocket_wrap
     , @death_timer_interval
   
   send : (data)->
+    return if @_need_delete
     if @websocket.readyState != @websocket.OPEN
       @queue.push data
     else
